@@ -39,14 +39,14 @@ def compare_angles(previous_l, current_l, angle):
             previous_l = previous_l.rstrip('\n')
             previous_l = previous_l + "   midnight"
             previous_l = previous_l + '\n'
-            print(previous_l)
+            #print(previous_l)
             angle.write(previous_l)
             return True
         else:
             current_l = current_l.rstrip('\n')
             current_l = current_l + "   midnight"
             current_l = current_l + '\n'
-            print(current_l)
+            #print(current_l)
             angle.write(current_l)
             return True
     elif float(previous_l.split()[4]) > 300 and float(current_l.split()[4]) < 300:
@@ -54,14 +54,14 @@ def compare_angles(previous_l, current_l, angle):
             previous_l = previous_l.rstrip('\n')
             previous_l=previous_l + "   noon"
             previous_l=previous_l + '\n'
-            print(previous_l)
+            #print(previous_l)
             angle.write(previous_l)
             return True
         else:
             current_l = current_l.rstrip('\n')
             current_l = current_l + "   noon"
             current_l = current_l + '\n'
-            print(current_l)
+            #print(current_l)
             angle.write(current_l)
             return True
 
@@ -147,79 +147,50 @@ angle=open(satelites_angle_path, "r")
 distancies14=open(satelites_distance14_path, "w")
 
 
-header= "Station"+"  "+"Satellit"+"  "+"Distance"+"  "+"Angle"+ '\n'
+header= "Station"+"  "+"Satellit"+"  "+"Fi_Satellite"+"  "+"Lambda_Satellite"+" "+"Fi_Station"+"  "+"Lambda Station"+" "+"Azimuth"+" "+"Azimuth Reverse"+ '\n'
 distancies14.write(header)
 
 
-# def StationSateliteDistance (FiSt, FiSa, LambdaSt, LambdaSa, rSt):
-#     dist= math.acos ((math.cos(math.radians(90)-math.radians(FiSt)))*(math.cos(math.radians(90)-math.radians(FiSa)))+(math.sin(math.radians(90)-math.radians(FiSt)))*(math.sin(math.radians(90)-math.radians(FiSa)))*(math.cos(math.radians(LambdaSt)-math.radians(LambdaSa))))*(rSt/1000.0)
-#     a=math.acos(math.cos(math.radians(90)-math.radians(FiSa)))*(rSt/1000.0)
-#     b=math.acos(math.cos(math.radians(90)-math.radians(FiSt)))*(rSt/1000.0)
+import pygeodesy as geo
 
-#     c = (math.cos(a)-math.cos(b)*math.cos(dist))
-#     print("c is " + str(c) + "\n")
-#     d = (math.sin(b)*math.sin(dist))
-#     print("d is " + str(d) + "\n")
+temp = stationsFiLa.readlines()
 
-#     print(FiSt, FiSa, LambdaSt, LambdaSa, rSt)
+for i in angle.readlines():
+    a=i.split()
+    #print(i+"\n")   
+    if len(a) == 12:
+        FiSa = float(a[10])
+        name=a[0]
+        if float(a[9]) < 180:
+            LambdaSa = float(a[9])
+        else:
+            LambdaSa = (float(a[9])-180)*(-1.0)   
 
+    for j in temp:
+        j = j.split()
 
+        try:
+            FiSt= float(j[2])
+            LambdaSt= float(j[3])
+            rSt= float(j[4])/1000.0
 
-#     angle=math.acos(c/d)
-#     return dist, angle
+            distance = geo.cosineLaw(FiSa, LambdaSa, FiSt, LambdaSt, rSt)
 
+            azimuth = geo.bearing(FiSt, LambdaSt, FiSa, LambdaSa)
+            rev_azimuth = geo.bearing(FiSa, LambdaSa, FiSt, LambdaSt)
 
-# temp = stationsFiLa.readlines()
+            rednew=[j[0:2], name, FiSa, LambdaSa, FiSt, LambdaSt, distance, azimuth, rev_azimuth]
+            distancies14.write(str(rednew)+'\n')
 
-# for i in angle.readlines():
-#     a=i.split()
-#     print(i+"\n")   
-#     if len(a) == 12:
-#         FiSa = float(a[10])
-#         name=a[0]
-#         if float(a[9]) < 180:
-#             LambdaSa = float(a[9])
-#         else:
-#             LambdaSa = (float(a[9])-180)*(-1.0)   
+        except:
+            l=0
 
-#     for j in temp:
-#         j = j.split()
-
-#         try:
-#             FiSt= float(j[2])
-#         except Exception as e:
-#             print("Failed to parse FiSt: 1")
-#             print(j)
-#             continue
-
-#         try:
-#             LambdaSt= float(j[3])
-#         except Exception as e:
-#             print("Failed to parse FiSt: 2")
-#             print(j)
-#             continue
-
-#         try:
-#             rSt= float(j[4])/1000.0
-#         except Exception as e:
-#             print("Failed to parse FiSt: 3")
-#             print(j)
-#             continue
-#         try:
-#             dist, angle = StationSateliteDistance(FiSt, FiSa, LambdaSt, LambdaSa, rSt)
-#             rednew=[j[0:2], name, dist, angle]
-#             distancies14.write(str(rednew)+'\n')
-#         except Exception as e:
-#             print("Failed to do magic")
-#             print(str(FiSa) + " " + str(FiSt) + "\n")
-#             print(e)
-#             print(str(FiSt) + " " + str(FiSa) + " " + str(LambdaSt) + " " + str(LambdaSa) + " " + str(rSt))
-#             print("\n")
-
-#             continue
+            #stationsFiLa.seek(0)
 
 
-# distancies14.close()
+            continue
+
+distancies14.close()
 
 
            
