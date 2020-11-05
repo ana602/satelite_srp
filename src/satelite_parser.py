@@ -147,7 +147,7 @@ angle=open(satelites_angle_path, "r")
 distancies14=open(satelites_distance14_path, "w")
 
 
-header= "Station"+"  "+"Satellit"+"  "+"Fi_Satellite"+"  "+"Lambda_Satellite"+" "+"Fi_Station"+"  "+"Lambda Station"+" "+"Azimuth"+" "+"Azimuth Reverse"+ '\n'
+header= "Station"+"  "+"Satellit"+"  "+"Fi_Satellite"+"  "+"Lambda_Satellite"+" "+"Fi_Station"+"  "+"Lambda Station"+"  "+"Distance"+" "+"Azimuth"+" "+"Azimuth Reverse"+" "+"Sredisnji kut" '\n'
 distancies14.write(header)
 
 
@@ -178,8 +178,9 @@ for i in angle.readlines():
 
             azimuth = geo.bearing(FiSt, LambdaSt, FiSa, LambdaSa)
             rev_azimuth = geo.bearing(FiSa, LambdaSa, FiSt, LambdaSt)
+            cent_angle = (180*distance)/(rSt*math.pi)
 
-            rednew=[j[0:2], name, FiSa, LambdaSa, FiSt, LambdaSt, distance, azimuth, rev_azimuth]
+            rednew=[j[0:2], name, FiSa, LambdaSa, FiSt, LambdaSt, distance, azimuth, rev_azimuth, cent_angle]
             distancies14.write(str(rednew)+'\n')
 
         except:
