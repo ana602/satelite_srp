@@ -65,6 +65,7 @@ def compare_angles(previous_l, current_l, angle):
             angle.write(current_l)
             return True
 
+
 for x in range(len(open(satelites_b14_path, "r").readlines())-1):
     current_line=sateliti14.readline()
     if checkSameSatellite(previous_line, current_line):
@@ -109,6 +110,24 @@ angle2.close()
 #caclulating fi. lambda coordinates of stations
 import math
 
+# Function to calculate cos 
+# value of angle c 
+def cal_cos(n): 
+  
+    cosval = 0
+  
+    # Converting degrees to radian 
+    n = math.radians(n)
+ 
+    cosval = math.cos(n)
+  
+    return cosval
+  
+# Function to find third side 
+def third_side(a, b, alfa): 
+    angle = cal_cos(alfa) 
+    return math.sqrt((a * a) + (b * b) - 2 * a * b * angle) 
+
 stations=open(mgex_path, "r")
 stationsFiLa=open(satelites_stationsFiLa_path, "w")
 
@@ -147,8 +166,8 @@ angle=open(satelites_angle_path, "r")
 distancies14=open(satelites_distance14_path, "w")
 
 
-header= "Station"+"  "+"Satellit"+"  "+"Fi_Satellite"+"  "+"Lambda_Satellite"+" "+"Fi_Station"+"  "+"Lambda Station"+" "+"Azimuth"+" "+"Azimuth Reverse"+ '\n'
-distancies14.write(header)
+#header= "Station"+"  "+"Satellit"+"  "+"Fi_Satellite"+"  "+"Lambda_Satellite"+" "+"Fi_Station"+"  "+"Lambda Station"+"  "+"Distance"+" "+"Azimuth"+" "+"Azimuth Reverse"+" "+"Sredisnji kut" '\n'
+distancies14.write("%-11s %-10s %-12s %-16s %-22s %-22s %-22s %-22s %-22s %-22s %-22s\n" % ("Station", "Satellite", "FI_Satellite", "Lamda_Satellite", "Fi_Station", "Lambda_Station", "Distance", "Azimuth", "Azimuth Reverse", "Central angle", "Third side"))
 
 
 import pygeodesy as geo
@@ -178,9 +197,18 @@ for i in angle.readlines():
 
             azimuth = geo.bearing(FiSt, LambdaSt, FiSa, LambdaSa)
             rev_azimuth = geo.bearing(FiSa, LambdaSa, FiSt, LambdaSt)
+            alfa = (180*distance)/(rSt*math.pi)
 
-            rednew=[j[0:2], name, FiSa, LambdaSa, FiSt, LambdaSt, distance, azimuth, rev_azimuth]
-            distancies14.write(str(rednew)+'\n')
+            a = rSt
+            b = rSt + 20200.0
+
+            tr_side = third_side(a, b, alfa)
+
+            #izracun kuta
+
+            rednew=[j[0:2], name, FiSa, LambdaSa, FiSt, LambdaSt, distance, azimuth, rev_azimuth, tr_side]
+            #distancies14.write(str(rednew)+'\n')
+            distancies14.write("%-5s %-5s %-10s %-12f %-16f %-22s %-22s %-22s %-22s %-22s %-22s %-22s\n" % (j[0], j[1], name, FiSa, LambdaSa, str(FiSt), str(LambdaSt), str(distance), str(azimuth), str(rev_azimuth), str(alfa), str(tr_side)))
 
         except:
             l=0
@@ -191,4 +219,10 @@ for i in angle.readlines():
             continue
 
 distancies14.close()
-           
+angle.close()
+
+
+
+
+#print(third_side(a, b, c))
+#print(cal_cos(c))

@@ -13,3 +13,4 @@ satelites_angle_path = str(Path(__file__).parent.parent) + "\\gen_data\\" + sat_
 satelites_angle2_path = str(Path(__file__).parent.parent) + "\\gen_data\\" + sat_file_id + "_angle2.txt"
 satelites_stationsFiLa_path = str(Path(__file__).parent.parent) + "\\gen_data\\" + station_file_id + "_stationsFiLa.txt"
 satelites_distance14_path = str(Path(__file__).parent.parent) + "\\gen_data\\" + sat_file_id + "_distance14.txt"
+satelites_distance14_sorted_path = str(Path(__file__).parent.parent) + "\\gen_data\\" + sat_file_id + "_distance14_sorted.txt"
