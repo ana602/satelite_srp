@@ -36,33 +36,53 @@ def checkSameSatellite(previous, current):
 def compare_angles(previous_l, current_l, angle):
     if float(previous_l.split()[4]) < 180 and float(current_l.split()[4]) > 180:
         if 180-float(previous_l.split()[4]) < float(current_l.split()[4]) - 180:
-            previous_l = previous_l.rstrip('\n')
-            previous_l = previous_l + "   midnight"
-            previous_l = previous_l + '\n'
+            previous_l1 = previous_l.split()
+            previous_l1[0] = previous_l1[0] + ".1"
+            previous_l1.append("midnight")
+            # previous_l = previous_l.rstrip('\n')
+            # previous_l = previous_l + "   midnight"
+            # previous_l = previous_l + '\n'
             #print(previous_l)
-            angle.write(previous_l)
+            a, b, c, d, e, f, g, h, i, j, k, l = previous_l1[0], previous_l1[1], previous_l1[2], previous_l1[3], previous_l1[4], previous_l1[5], previous_l1[6], previous_l1[7], previous_l1[8], previous_l1[9], previous_l1[10], previous_l1[11]
+            angle.write("%-5s %-20s %-7s %-7s %-7s %-7s %-5s %-5s %-9s %-7s %-7s %-10s\n" % (previous_l1[0], previous_l1[1], previous_l1[2], previous_l1[3], previous_l1[4], previous_l1[5], previous_l1[6], previous_l1[7], previous_l1[8], previous_l1[9], previous_l1[10], previous_l1[11]))
+            #angle.write(str(previous_l1))
             return True
         else:
-            current_l = current_l.rstrip('\n')
-            current_l = current_l + "   midnight"
-            current_l = current_l + '\n'
+            current_l1 = current_l.split()
+            current_l1[0] = current_l1[0] + ".1"
+            current_l1.append("midnight")
+            # current_l = current_l.rstrip('\n')
+            # current_l = current_l + "   midnight"
+            # current_l = current_l + '\n'
             #print(current_l)
-            angle.write(current_l)
+            #angle.write(str(current_l1))
+            a, b, c, d, e, f, g, h, i, j, k, l = current_l1[0], current_l1[1], current_l1[2], current_l1[3], current_l1[4], current_l1[5], current_l1[6], current_l1[7], current_l1[8], current_l1[9], current_l1[10], current_l1[11]
+            angle.write("%-5s %-20s %-7s %-7s %-7s %-7s %-5s %-5s %-9s %-7s %-7s %-10s\n" % (current_l1[0], current_l1[1], current_l1[2], current_l1[3], current_l1[4], current_l1[5], current_l1[6], current_l1[7], current_l1[8], current_l1[9], current_l1[10], current_l1[11]))
             return True
     elif float(previous_l.split()[4]) > 300 and float(current_l.split()[4]) < 300:
         if 360-float(previous_l.split()[4]) < float(current_l.split()[4]):
-            previous_l = previous_l.rstrip('\n')
-            previous_l=previous_l + "   noon"
-            previous_l=previous_l + '\n'
+            previous_l2 = previous_l.split()
+            previous_l2[0] = previous_l2[0] +".2"
+            previous_l2.append("noon")
+            # previous_l = previous_l.rstrip('\n')
+            # previous_l=previous_l + "   noon"
+            # previous_l=previous_l + '\n'
             #print(previous_l)
-            angle.write(previous_l)
+            a, b, c, d, e, f, g, h, i, j, k, l = previous_l2[0], previous_l2[1], previous_l2[2], previous_l2[3], previous_l2[4], previous_l2[5], previous_l2[6], previous_l2[7], previous_l2[8], previous_l2[9],previous_l2[10], previous_l2[11]
+            angle.write("%-5s %-20s %-7s %-7s %-7s %-7s %-5s %-5s %-9s %-7s %-7s %-10s\n" % (previous_l2[0], previous_l2[1], previous_l2[2], previous_l2[3], previous_l2[4], previous_l2[5], previous_l2[6], previous_l2[7], previous_l2[8], previous_l2[9],previous_l2[10], previous_l2[11]))
+            #angle.write(str(previous_l2))
             return True
         else:
-            current_l = current_l.rstrip('\n')
-            current_l = current_l + "   noon"
-            current_l = current_l + '\n'
+            current_l2 = current_l.split()
+            current_l2[0] = current_l2[0] + ".2"
+            current_l2.append("noon")
+            # current_l = current_l.rstrip('\n')
+            # current_l = current_l + "   noon"
+            # current_l = current_l + '\n'
             #print(current_l)
-            angle.write(current_l)
+            a, b, c, d, e, f, g, h, i, j, k, l = current_l2[0], current_l2[1], current_l2[2], current_l2[3], current_l2[4], current_l2[5], current_l2[6], current_l2[7], current_l2[8], current_l2[9], current_l2[10], current_l2[11]
+            angle.write("%-5s %-20s %-7s %-7s %-7s %-7s %-5s %-5s %-9s %-7s %-7s %-10s\n" % (current_l2[0], current_l2[1], current_l2[2], current_l2[3], current_l2[4], current_l2[5], current_l2[6], current_l2[7], current_l2[8], current_l2[9], current_l2[10], current_l2[11]))
+            #angle.write(str(current_l2))
             return True
 
 
