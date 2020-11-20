@@ -19,7 +19,7 @@ for x in range(len(open(satelites_distance14_path, "r").readlines())-1):
         f=open("C:/Users/7Administrator/Desktop/satelite_srp/gen_data/coordinates"+str(satellite_number)+".json", "w")#close at the end
         if CheckSameSat(previous_line, current_line):
 
-            my_point = Point((float(previous_line.split()[5]), float(previous_line.split()[6])))
+            my_point = Point((float(previous_line.split()[6]), float(previous_line.split()[5])))
             my_feature = Feature(geometry =my_point, id = previous_line.split()[0:2] )
 
             colection.append(my_feature)

@@ -27,17 +27,23 @@ previous_line=sateliti14.readline()
 
 #counter for how many times satelit passes 0 and 180 wit beta between -14 and 14
 counter14_0=0 
+#counter naming of the satellites
+cnt = 0
 
 def checkSameSatellite(previous, current):
+    print("previous")
+    print(previous.split())
+    print("current")
+    print(current.split())
     if float(previous.split()[0]) == float(current.split()[0]):
         return True
     return False
     
-def compare_angles(previous_l, current_l, angle):
+def compare_angles(previous_l, current_l, angle, counter=0):
     if float(previous_l.split()[4]) < 180 and float(current_l.split()[4]) > 180:
         if 180-float(previous_l.split()[4]) < float(current_l.split()[4]) - 180:
             previous_l1 = previous_l.split()
-            previous_l1[0] = previous_l1[0] + ".1"
+            previous_l1[0] = previous_l1[0] + "_"+ str(counter)
             previous_l1.append("midnight")
             # previous_l = previous_l.rstrip('\n')
             # previous_l = previous_l + "   midnight"
@@ -49,7 +55,7 @@ def compare_angles(previous_l, current_l, angle):
             return True
         else:
             current_l1 = current_l.split()
-            current_l1[0] = current_l1[0] + ".1"
+            current_l1[0] = current_l1[0] + "_"+ str(counter)
             current_l1.append("midnight")
             # current_l = current_l.rstrip('\n')
             # current_l = current_l + "   midnight"
@@ -62,7 +68,7 @@ def compare_angles(previous_l, current_l, angle):
     elif float(previous_l.split()[4]) > 300 and float(current_l.split()[4]) < 300:
         if 360-float(previous_l.split()[4]) < float(current_l.split()[4]):
             previous_l2 = previous_l.split()
-            previous_l2[0] = previous_l2[0] +".2"
+            previous_l2[0] = previous_l2[0] +"_"+ str(counter)
             previous_l2.append("noon")
             # previous_l = previous_l.rstrip('\n')
             # previous_l=previous_l + "   noon"
@@ -74,7 +80,7 @@ def compare_angles(previous_l, current_l, angle):
             return True
         else:
             current_l2 = current_l.split()
-            current_l2[0] = current_l2[0] + ".2"
+            current_l2[0] = current_l2[0] + "_"+ str(counter)
             current_l2.append("noon")
             # current_l = current_l.rstrip('\n')
             # current_l = current_l + "   noon"
@@ -84,13 +90,18 @@ def compare_angles(previous_l, current_l, angle):
             angle.write("%-5s %-20s %-7s %-7s %-7s %-7s %-5s %-5s %-9s %-7s %-7s %-10s\n" % (current_l2[0], current_l2[1], current_l2[2], current_l2[3], current_l2[4], current_l2[5], current_l2[6], current_l2[7], current_l2[8], current_l2[9], current_l2[10], current_l2[11]))
             #angle.write(str(current_l2))
             return True
+    else:
+        return False
 
-
+t_cnt = 1
 for x in range(len(open(satelites_b14_path, "r").readlines())-1):
     current_line=sateliti14.readline()
     if checkSameSatellite(previous_line, current_line):
-        if compare_angles(previous_line, current_line, angle):
+        if compare_angles(previous_line, current_line, angle, t_cnt):
             counter14_0 += 1
+            t_cnt += 1
+    else:
+        t_cnt = 1
     previous_line=current_line
 
 angle.close()
