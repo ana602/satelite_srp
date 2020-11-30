@@ -31,10 +31,10 @@ counter14_0=0
 cnt = 0
 
 def checkSameSatellite(previous, current):
-    print("previous")
-    print(previous.split())
-    print("current")
-    print(current.split())
+    # print("previous")
+    # print(previous.split())
+    # print("current")
+    # print(current.split())
     if float(previous.split()[0]) == float(current.split()[0]):
         return True
     return False
@@ -105,6 +105,7 @@ for x in range(len(open(satelites_b14_path, "r").readlines())-1):
     previous_line=current_line
 
 angle.close()
+
 f.seek(0)
 
 ##saving satelates with beta between -2 and 2
@@ -144,29 +145,35 @@ import math
 # Function to calculate cos 
 # value of angle c 
 def cal_cos(n): 
-  
     cosval = 0
-  
     # Converting degrees to radian 
     n = math.radians(n)
- 
     cosval = math.cos(n)
-  
     return cosval
   
 # Function to find third side 
 def third_side(a, b, alfa): 
     angle = cal_cos(alfa) 
-    return math.sqrt((a * a) + (b * b) - 2 * a * b * angle) 
+    return math.sqrt((a * a) + (b * b) - 2 * a * b * angle)
 
-stations=open(mgex_path, "r")
-stationsFiLa=open(satelites_stationsFiLa_path, "w")
+#Function that calculates the angel wich determenates wethwe it is seen or not
+def AngleVidljivost (Ra, trd_s, cent_angl):
+    angleVidljivost = math.degrees(math.asin(Ra*(math.sin(math.radians(cent_angl)))/trd_s))
+    return angleVidljivost
+
+stations = open(mgex_path, "r")
+stationsFiLa = open(satelites_stationsFiLa_path, "w")
+stationsFiLaXYZ = open(satelites_stationsFiLaXYZ_path, "w")
 
 with open(mgex_path) as myfile:
     head= [next(myfile) for x in range(4)]
-linija="NUM"+"  "+"STATION"+"     "+"FI"+"        "+"LAMBDA"+"         "+"r"+'\n'
+#linija="NUM"+"  "+"STATION"+"     "+"FI"+"        "+"LAMBDA"+"         "+"r"+'\n'
+
 stationsFiLa.writelines(head)
-stationsFiLa.write(linija)
+stationsFiLa.write("%-8s %-8s %-22s %-22s %-20s \n" % ("NUM", "STATION", "FI_Station", "Lamda_Station", "r_station"))
+
+stationsFiLaXYZ.writelines(head)
+stationsFiLaXYZ.write("%-8s %-8s %-22s %-22s %-20s %-22s %-22s %-22s \n" % ("NUM", "STATION", "FI_Station", "Lamda_Station", "r_station", "X", "Y", "Z"))
 
 for line in stations:
     red=line.split()
@@ -186,19 +193,19 @@ for line in stations:
         FiSt= math.degrees(math.atan2(zKoor,(math.sqrt((xKoor**2)+(yKoor**2)))))
         rSt= math.sqrt((xKoor**2)+(yKoor**2)+(zKoor**2))
 
-        stationsFiLa.write(red[0]+" "+red[1]+" "+str(FiSt)+" "+str(LambdaSt)+" "+str(rSt)+'\n')
+        #stationsFiLa.write(red[0]+" "+red[1]+" "+str(FiSt)+" "+str(LambdaSt)+" "+str(rSt)+'\n')
+        stationsFiLa.write("%-8s %-8s %-22s %-22s %-20s\n" % (red[0], red[1], str(FiSt), str(LambdaSt), str(rSt)))
+        stationsFiLaXYZ.write("%-8s %-8s %-22s %-22s %-20s %-22s %-22s %-22s \n" % (red[0], red[1], str(FiSt), str(LambdaSt), str(rSt), str(xKoor), str(yKoor), str(zKoor)))
 
 stationsFiLa.close()
+stationsFiLaXYZ.close()
 
 stationsFiLa=open(satelites_stationsFiLa_path)
-satellitsWithIn14=open(satelites_angle_path)
 angle=open(satelites_angle_path, "r")
 
 distancies14=open(satelites_distance14_path, "w")
 
-
-#header= "Station"+"  "+"Satellit"+"  "+"Fi_Satellite"+"  "+"Lambda_Satellite"+" "+"Fi_Station"+"  "+"Lambda Station"+"  "+"Distance"+" "+"Azimuth"+" "+"Azimuth Reverse"+" "+"Sredisnji kut" '\n'
-distancies14.write("%-11s %-10s %-12s %-16s %-22s %-22s %-22s %-22s %-22s %-22s %-22s\n" % ("Station", "Satellite", "FI_Satellite", "Lamda_Satellite", "Fi_Station", "Lambda_Station", "Distance", "Azimuth", "Azimuth Reverse", "Central angle", "Third side"))
+distancies14.write("%-11s %-10s %-12s %-16s %-22s %-22s %-22s %-22s %-22s %-22s %-22s\n" % ("Station", "Satellite", "FI_Satellite", "Lamda_Satellite", "Fi_Station", "Lambda_Station", "Distance", "Azimuth", "Azimuth Reverse", "Central angle", "Third side"))#add titels for angels
 
 
 import pygeodesy as geo
@@ -206,8 +213,7 @@ import pygeodesy as geo
 temp = stationsFiLa.readlines()
 
 for i in angle.readlines():
-    a=i.split()
-    #print(i+"\n")   
+    a=i.split()   
     if len(a) == 12:
         FiSa = float(a[10])
         name=a[0]
@@ -236,15 +242,15 @@ for i in angle.readlines():
             tr_side = third_side(a, b, alfa)
 
             #izracun kuta
+            #AngleSaStCen = AngleVidljivost (b, tr_side, alfa)
+            #angleCenSatSt = 180 - AngleSaStCen - alfa
 
             rednew=[j[0:2], name, FiSa, LambdaSa, FiSt, LambdaSt, distance, azimuth, rev_azimuth, tr_side]
             #distancies14.write(str(rednew)+'\n')
-            distancies14.write("%-5s %-5s %-10s %-12f %-16f %-22s %-22s %-22s %-22s %-22s %-22s %-22s\n" % (j[0], j[1], name, FiSa, LambdaSa, str(FiSt), str(LambdaSt), str(distance), str(azimuth), str(rev_azimuth), str(alfa), str(tr_side)))
+            distancies14.write("%-5s %-5s %-10s %-12f %-16f %-22s %-22s %-22s %-22s %-22s %-22s %-22s\n" % (j[0], j[1], name, FiSa, LambdaSa, str(FiSt), str(LambdaSt), str(distance), str(azimuth), str(rev_azimuth), str(alfa), str(tr_side)))#add names for angels
 
         except:
             l=0
-
-            #stationsFiLa.seek(0)
 
 
             continue
@@ -255,5 +261,3 @@ angle.close()
 
 
 
-#print(third_side(a, b, c))
-#print(cal_cos(c))

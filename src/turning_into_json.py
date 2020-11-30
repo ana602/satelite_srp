@@ -25,15 +25,7 @@ for x in range(len(open(satelites_distance14_path, "r").readlines())-1):
             colection.append(my_feature)
 
             my_featurecollection = FeatureCollection(colection)
-            
-            # coordinates.append([previous_line.split()[5], previous_line.split()[6], 0])
 
-            # geo_json = {"type": "Feature", "geometry": {"type": "Point", "coordinates": [], "id": []}}
-
-            # geo_json["geometry"]["coordinates"].append(coordinates)
-            # geo_json["geometry"]["id"].append(previous_line.split()[0:1])
- 
-            #f.write(json.dump(my_featurecollection, indent=4))
             json.dump(my_featurecollection, f, indent = 4)
         else:
             colection = []
