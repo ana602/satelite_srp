@@ -21,4 +21,9 @@ def car2pol(xKoor, yKoor, zKoor):
         r= math.sqrt((xKoor**2)+(yKoor**2)+(zKoor**2))
         return Fi, Lmb, r
 
-#print(car2pol(x,y,z))
+print(car2pol(x,y,z))
+
+a = float(3_1)
+print(a)
+b = str("3_1")
+print(b) 

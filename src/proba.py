@@ -82,14 +82,14 @@ stationFiLaXYZ.close()
 #only stations satellite can see
 f = open(satelites_distance14XYZ_path, "r")
 visibility = open(satellite_visibility_path, "w")
-visibility.write("%-16s %-10s %-15s %-18s %-22s %-22s %-22s\n" % ("Station", "Satellite","Fi_Satellite", "Lambda_Satellite", "X", "Y", "Z"))
+visibility.write("%-16s %-10s %-15s %-18s %-22s %-22s %-22s %-22s\n" % ("Station", "Satellite","Fi_Satellite", "Lambda_Satellite", "X", "Y", "Z", "Distance"))
 
 for line in f:
     a = line.split()
     try: 
         if float(a[12]) >= 90:
             #a,b,c,d,e,f,g,h,i,j = a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[10], a[11], a[12], a[13], a[14]
-            visibility.write("%-5s %-10s %-10s %-15s %-18s %-22s %-22s %-22s\n" % (a[0], a[1], a[2], a[3], a[4], a[12], a[13], a[14])) #with or without str
+            visibility.write("%-5s %-10s %-10s %-15s %-18s %-22s %-22s %-22s %-22s\n" % (a[0], a[1], a[2], a[3], a[4], a[12], a[13], a[14], a[7])) #with or without str
     except:
         l =0 
 
@@ -136,12 +136,12 @@ for x in range(len(open(satellite_visibility_path, "r").readlines())-1):
         do = open("C:/Users/7Administrator/Desktop/satelite_srp/gen_data/coordinates"+str(satellite)+".txt", "w")#close at the end
         nameStationA = h[0]
         nameStationB = h[1]
-        xK = h[3]
-        yK = h[4]
-        zK = h[5]
+        xK = h[5]
+        yK = h[6]
+        zK = h[7]
         #if satellit == h[2] izracunaj koordinate i stavi ih u listu (vadi iz tyt angels gdje se svi sateliti pojavljuju samo jednom!!)
         #put the coordinates of the satellite in a list
-        lst.append(str(nameStationA)+"/"+str(nameStationB)+";"+str(yK)+";"+str(xK)+";"+str(zK)+ "\n") #Replace with add to a list  
+        lst.append(str(nameStationA)+"/"+str(nameStationB)+";"+str(yK)+";"+str(xK)+";"+str(zK)+ "\n") #lst.append(str(nameStationA)+"_"+str(nameStationB)+","+str(yK)+","+str(xK)+","+str(zK)+","+"opis"+ "\n")    
         if CheckSameSat(previous_li, current_li) is False:
             for line in open(satelites_angle_path, "r").readlines():
                 a = line.split()
@@ -150,10 +150,10 @@ for x in range(len(open(satellite_visibility_path, "r").readlines())-1):
                     fiPr = float(a[10])
                     lmdPr = float(a[9])
                     fi, lmd = polCoordAngle(fiPr, lmdPr)
-                    r = 6372000.0 + 20200000.0
-                    yC, xC, zC = pol2car(fi, lmd, r)#kako spremiti zasebno???
+                    r = 6372000.0 # + 20200000.0
+                    yC, xC, zC = pol2car(fi, lmd, r)#kako spremiti zasebno???_,xC,_
                 
-            satKoor.append(str(nameSat)+";"+str(yC)+";"+str(xC)+";"+str(zC)+ "\n")
+            satKoor.append(str(nameSat)+";"+str(yC)+";"+str(xC)+";"+str(zC)+ "\n")#satKoor.append(str(nameSat)+","+str(yC)+","+str(xC)+","+str(zC)+","+"opis"+ "\n")
             do = open("C:/Users/7Administrator/Desktop/satelite_srp/gen_data/coordinates"+str(satellite)+".txt", "w")#close at the end
             #write coorinates of the satellite in the file 
             do.writelines(satKoor)
@@ -168,8 +168,3 @@ for x in range(len(open(satellite_visibility_path, "r").readlines())-1):
     except:
         l=0
     previous_li = current_li
-
-
-
-
-
